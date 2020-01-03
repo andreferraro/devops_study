@@ -1,0 +1,44 @@
+version: "3"
+
+networks:
+  auth_network:
+    driver: bridge
+
+services:
+  postgres:
+    container_name: auth_postgresql
+    image: postgres
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - auth_network
+  keycloak:
+    container_name: auth_keycloak
+    image: jboss/keycloak
+    command: 
+      -Djboss.socket.binding.port-offset=120
+    restart: always
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: postgres
+      DB_DATABASE: ${DB_DATABASE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_SCHEMA: public
+      KEYCLOAK_USER: ${KEYCLOAK_USER}
+      KEYCLOAK_PASSWORD: ${KEYCLOAK_PASSWORD}
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "ssl=true"
+    volumes: 
+      - keycloak_data
+      - ./themes/custom:/opt/jboss/keycloak/themes/custom
+    ports:
+      - 8200:8200
+    depends_on:
+      - postgres
+    networks:
+      - auth_network

@@ -1,2 +1,4 @@
 OpenSSL_Certifies/certs
 MySQL_OverSSL/data
+KeyCloak_PostgreSQL/SampleApp/NodeJs/node_modules
+KeyCloak_PostgreSQL/data
