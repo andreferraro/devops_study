@@ -2,3 +2,5 @@ OpenSSL_Certs/certs
 MySQL_OverSSL/data
 KeyCloak_PostgreSQL/SampleSmallApp/NodeJs/node_modules
 KeyCloak_PostgreSQL/data
+Jenkins_Sonarqube_NodeJs_PM2/SampleApp
+Jenkins_Sonarqube_NodeJs_PM2/Sonarqube_PostgreSQL/data

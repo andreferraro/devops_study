@@ -1,0 +1,45 @@
+version: "3"
+
+services:
+  postgres:
+    container_name: codequality_postgresql
+    image: postgres
+    networks:
+      - sonarnet
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - ./data:/var/lib/postgresql/data
+  sonarqube:
+    container_name: codequality_sonarqube
+    image: sonarqube
+    expose:
+      - 9000
+    ports:
+      - "9000:9000"
+    networks:
+      - sonarnet
+    environment:
+      SONARQUBE_JDBC_URL: ${JDBC_URL}
+      SONARQUBE_JDBC_USERNAME: ${DB_USER}
+      SONARQUBE_JDBC_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - sonarqube_conf:/opt/sonarqube/conf
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_bundled-plugins:/opt/sonarqube/lib/bundled-plugins
+    depends_on:
+      - postgres
+
+networks:
+  sonarnet:
+
+volumes:
+  sonarqube_conf:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_bundled-plugins:
+  postgresql:
+  postgresql_data:
